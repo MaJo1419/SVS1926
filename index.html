@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vereinsverwaltung</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="screen">
+    <div class="login-box">
+      <h1>Vereinsverwaltung</h1>
+      <p class="subtitle">Bitte melde dich an</p>
+      <form id="login-form">
+        <label>E-Mail
+          <input type="email" id="login-email" required autocomplete="username">
+        </label>
+        <label>Passwort
+          <input type="password" id="login-password" required autocomplete="current-password">
+        </label>
+        <button type="submit" class="btn-primary">Anmelden</button>
+        <p id="login-error" class="error-text"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div id="app-shell" class="screen hidden">
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h2>Verein</h2>
+        <button id="sidebar-toggle" aria-label="Menü ein-/ausblenden">☰</button>
+      </div>
+      <nav id="main-nav">
+        <a href="#dashboard" data-module="dashboard" class="nav-link active">🏠 Übersicht</a>
+        <a href="#mitglieder" data-module="mitglieder" class="nav-link" data-roles="A,B">👥 Mitglieder</a>
+        <a href="#belegungsplan" data-module="belegungsplan" class="nav-link">📅 Platzbuchung</a>
+        <a href="#dokumente" data-module="dokumente" class="nav-link">📁 Dokumente</a>
+        <a href="#kasse" data-module="kasse" class="nav-link" data-roles="A,B">💰 Kasse / Strichliste</a>
+        <a href="#training" data-module="training" class="nav-link">🏃 Training</a>
+        <a href="#website" data-module="website" class="nav-link" data-roles="A">🌐 Website</a>
+        <a href="#spielerpaesse" data-module="spielerpaesse" class="nav-link">🪪 Spielerpässe</a>
+        <a href="#schiri" data-module="schiri" class="nav-link">🧑‍⚖️ Schiri-App</a>
+        <a href="#turniere" data-module="turniere" class="nav-link">🏆 Turniere</a>
+        <a href="#liga" data-module="liga" class="nav-link">📊 Liga</a>
+        <a href="#benutzer" data-module="benutzer" class="nav-link" data-roles="A">⚙️ Benutzerverwaltung</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="user-info"></div>
+        <button id="logout-btn" class="btn-secondary">Abmelden</button>
+      </div>
+    </aside>
+
+    <main id="content-area">
+      <!-- module content is rendered here by js/modules/*.js -->
+    </main>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/router.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

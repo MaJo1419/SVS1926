@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function eingeloggt() {
+      return request.auth != null;
+    }
+
+    function rolle() {
+      return get(/databases/$(database)/documents/benutzer/$(request.auth.uid)).data.rolle;
+    }
+
+    function istRolleAB() {
+      return eingeloggt() && rolle() in ["A", "B"];
+    }
+
+    // Mitgliederverwaltung: nur Rolle A/B lesen & schreiben
+    match /mitglieder/{mitgliedId} {
+      allow read, write: if istRolleAB();
+    }
+
+    // Benutzerprofile: jeder eingeloggte darf sein eigenes lesen,
+    // nur Rolle A darf Rollen/Freigaben verwalten
+    match /benutzer/{userId} {
+      allow read: if eingeloggt() && (request.auth.uid == userId || rolle() == "A");
+      allow write: if eingeloggt() && rolle() == "A";
+    }
+
+    // Platzbuchung/Belegungsplan: alle eingeloggten lesen, A/B/individuell-freigegebene C schreiben
+    match /belegungsplan/{buchungId} {
+      allow read: if eingeloggt();
+      allow write: if istRolleAB();
+    }
+
+    // Dokumenten-Register: alle eingeloggten lesen, A/B verwalten
+    match /dokumente/{dokId} {
+      allow read: if eingeloggt();
+      allow write: if istRolleAB();
+    }
+
+    // Default: alles andere gesperrt, bis das jeweilige Modul eigene Regeln bekommt
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
