@@ -3,11 +3,12 @@ import { onAppReady } from "./auth.js";
 import { registerModule, navigate } from "./router.js";
 import { renderDashboard } from "./modules/dashboard.js";
 import { renderMitglieder } from "./modules/mitglieder.js";
+import { renderBelegungsplan } from "./modules/belegungsplan.js";
 
 registerModule("dashboard", renderDashboard);
 registerModule("mitglieder", renderMitglieder);
+registerModule("belegungsplan", renderBelegungsplan);
 // weitere Module werden hier registriert, sobald sie gebaut sind:
-// registerModule("belegungsplan", renderBelegungsplan);
 // registerModule("dokumente", renderDokumente);
 // registerModule("kasse", renderKasse);
 // registerModule("training", renderTraining);

@@ -14,6 +14,15 @@ service cloud.firestore {
       return eingeloggt() && rolle() in ["A", "B"];
     }
 
+    function hatFreigabe(modul) {
+      return eingeloggt() &&
+        get(/databases/$(database)/documents/benutzer/$(request.auth.uid)).data.freigaben[modul] == true;
+    }
+
+    function darfModulSchreiben(modul) {
+      return istRolleAB() || hatFreigabe(modul);
+    }
+
     // Mitgliederverwaltung: nur Rolle A/B lesen & schreiben
     match /mitglieder/{mitgliedId} {
       allow read, write: if istRolleAB();
@@ -28,6 +37,12 @@ service cloud.firestore {
 
     // Platzbuchung/Belegungsplan: alle eingeloggten lesen, A/B/individuell-freigegebene C schreiben
     match /belegungsplan/{buchungId} {
+      allow read: if eingeloggt();
+      allow write: if darfModulSchreiben("belegungsplan");
+    }
+
+    // Ressourcen (Plätze, Hallen, Busse): alle eingeloggten lesen, nur A/B verwalten
+    match /ressourcen/{ressourceId} {
       allow read: if eingeloggt();
       allow write: if istRolleAB();
     }
